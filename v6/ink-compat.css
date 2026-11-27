@@ -1,0 +1,80 @@
+/* ================================================================
+   INKFLAKE 兼容层 v6 · 作用域版 —— ink-compat.css
+   ---------------------------------------------------------------
+   为什么是作用域：老站点的 --bg / --ink / --line 全局变量不能动，
+   否则暗色站（账本）会被兼容层改成米白。所以只在加了 .ink-scope
+   的容器内部重定义 v6 token，外面一律不碰。
+
+   用法：
+     <link rel="stylesheet" href="/v6/ink.css">
+     <link rel="stylesheet" href="/v6/ink-compat.css">
+     <div class="ink-scope">      ← 浅底页面（学习中心、物价、图鉴集）
+     <div class="ink-scope ink-dark">  ← 暗底页面（账本、86 面板）
+   之后容器里就能直接写 .ink-card / .ink-btn / .ink-badge 等组件，
+   它们会自动取当前页面自己的配色，不会打架。
+   ================================================================ */
+
+/* —— 浅底作用域：取 --paper/--ink 体系；没有就退回 v6 默认 —— */
+.ink-scope{
+  --bg:        var(--paper,   #f7f4ed);
+  --bg2:       var(--paper-2, #fffdf8);
+  --bg3:       var(--paper-3, #fbf7ec);
+  --bg-card:   var(--paper-2, rgba(255,253,248,.88));
+  --translucent: var(--paper-2, rgba(255,253,248,.9));
+
+  --t1: var(--ink,   #1b1a17);
+  --t2: var(--ink-2, #443f38);
+  --t3: var(--ink-3, #7d786e);
+
+  --border:        var(--line,   #ddd6c8);
+  --border-strong: var(--line-2, #c9c0ac);
+  --color-accent:  var(--accent, #c64f44);
+  --ink-accent-soft: color-mix(in srgb, var(--accent, #c64f44) 10%, transparent);
+  --primary: var(--accent, #c64f44);
+  --shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+
+/* —— 暗底作用域：取账本/面板的 --surface 体系 —— */
+.ink-scope.ink-dark{
+  --bg:        var(--surface,   #1b1915);
+  --bg2:       var(--surface-2, #211e19);
+  --bg3:       var(--surface-2, #211e19);
+  --bg-card:   var(--surface,   #1b1915);
+  --translucent: var(--surface, rgba(27,25,21,.92));
+
+  --t1: var(--ink,   #f1ebdd);
+  --t2: var(--ink-2, #c9c1b2);
+  --t3: var(--muted, #91897a);
+
+  --border:        var(--line,        rgba(241,235,221,.11));
+  --border-strong: var(--line-strong, rgba(241,235,221,.22));
+  --color-accent:  var(--accent, #d97757);
+  --ink-accent-soft: color-mix(in srgb, var(--accent, #d97757) 12%, transparent);
+  --primary: var(--accent, #d97757);
+  --shadow: var(--shadow, 0 18px 46px rgba(0,0,0,.28));
+}
+
+/* —— 与配色无关的基础统一：焦点环、选中色、滚动条 ——
+   这几条在全局生效也不会改变任何布局，只是让各站点手感一致。 */
+:focus-visible{
+  outline: 2px solid var(--color-accent, #c64f44);
+  outline-offset: 2px;
+}
+::selection{
+  background: color-mix(in srgb, var(--color-accent, #c64f44) 22%, transparent);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--t1, #1b1a17) 26%, transparent) transparent;
+}
+::-webkit-scrollbar{ width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb{
+  background: color-mix(in srgb, var(--t1, #1b1a17) 24%, transparent);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover{
+  background: color-mix(in srgb, var(--t1, #1b1a17) 40%, transparent);
+  background-clip: content-box;
+}

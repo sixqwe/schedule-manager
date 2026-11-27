@@ -1,0 +1,93 @@
+/* ============================================================
+   INKFLAKE v6 主题层 —— theme.css
+   一句话：设计语言统一，色彩个性保留。
+
+   统一的是字体、圆角、过渡曲线、卡片质感、限宽节奏；
+   各站保留自己的主色 --accent，只通过 --site-accent 注入给 v6 组件。
+
+   加载顺序：ink.css → ink-compat.css → theme.css
+   用法：给 <html> 加 data-ink-site（任意值即可）
+   ============================================================ */
+
+/* —— 一、站点主色自动继承 ——
+   站点自己的 --accent 有值就用它，没有才退回 v6 暖亮灰。
+   想换主色，只改站点 CSS 里那一个 --accent，v6 组件自动跟随。 */
+[data-ink-site]{
+  --site-accent: var(--accent, #C2BDAD);
+  --color-accent: var(--site-accent);
+}
+
+/* —— 二、字体（规范第 4 条：正文标题衬线，元信息等宽）—— */
+[data-ink-site] body,
+[data-ink-site] button,
+[data-ink-site] input,
+[data-ink-site] select,
+[data-ink-site] textarea{
+  font-family: var(--font-serif, "Spectral","Noto Serif SC","Songti SC","Source Han Serif SC",serif);
+}
+[data-ink-site] code,
+[data-ink-site] pre,
+[data-ink-site] kbd,
+[data-ink-site] .ink-kbd,
+[data-ink-site] .ink-mono,
+[data-ink-site] .mono{
+  font-family: var(--mono, "JetBrains Mono","SF Mono",Menlo,monospace);
+}
+
+/* —— 三、圆角（规范第 5 条：整体偏直角）—— */
+[data-ink-site] .ink-card,
+[data-ink-site] .ink-note,
+[data-ink-site] .ink-table,
+[data-ink-site] .ink-input,
+[data-ink-site] .ink-select,
+[data-ink-site] .ink-textarea{
+  border-radius: var(--radius, 2px);
+}
+[data-ink-site] .ink-btn{
+  border-radius: var(--radius-btn, 4px);
+}
+[data-ink-site] .ink-badge,
+[data-ink-site] .ink-chip{
+  border-radius: var(--radius-pill, 10px);
+}
+
+/* —— 四、过渡（规范第 8 条：0.2~0.3s，统一曲线，不用弹跳）—— */
+[data-ink-site] a,
+[data-ink-site] button,
+[data-ink-site] .ink-card,
+[data-ink-site] .ink-btn,
+[data-ink-site] .ink-chip,
+[data-ink-site] .ink-tab{
+  transition:
+    background-color var(--dur, .24s) var(--ease, cubic-bezier(.4,0,.2,1)),
+    color            var(--dur, .24s) var(--ease, cubic-bezier(.4,0,.2,1)),
+    border-color     var(--dur, .24s) var(--ease, cubic-bezier(.4,0,.2,1)),
+    transform        var(--dur, .24s) var(--ease, cubic-bezier(.4,0,.2,1));
+}
+
+/* —— 五、卡片质感（规范第 7 条：毛玻璃 + 1px 边框 + hover 上浮 2px）—— */
+[data-ink-site] .ink-card{
+  background: var(--translucent, var(--bg-card));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+}
+[data-ink-site] .ink-card:hover{
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+}
+
+/* —— 六、图片（规范第 7 条：2px 圆角，头像不用圆）—— */
+[data-ink-site] .ink-card img{ border-radius: 2px; }
+
+/* —— 七、限宽节奏（规范第 8 条：1100px / 左右 24px / 手机 16px）—— */
+[data-ink-site] .ink-container{
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+@media (max-width: 640px){
+  [data-ink-site] .ink-container{ padding-left: 16px; padding-right: 16px; }
+}
